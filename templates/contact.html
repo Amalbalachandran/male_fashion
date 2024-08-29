@@ -1,0 +1,127 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block extra_style %}
+<style>
+/* Apply a border color to input and textarea fields */
+input[type="text"], textarea {
+    border: 2px solid #000000; /* Change #4CAF50 to your desired color */
+    border-radius: 4px; /* Optional: adds rounded corners */
+    padding: 10px; /* Adds some padding inside the input fields */
+    width: 100%; /* Makes the input and textarea full width of their container */
+    box-sizing: border-box; /* Ensures padding and border are included in the total width */
+}
+
+/* Optional: Add some styling for the textarea */
+/* textarea {
+    border: 2px solid #000000; 
+    height: 150px; 
+    resize: vertical; 
+} */
+
+textarea {
+    border: 2px solid #000000 !important;
+}
+
+
+/* Styling for the submit button */
+button.site-btn {
+    background-color: #000000; /* Background color for the button */
+    color: white; /* Text color for the button */
+    border: none; /* Remove default border */
+    padding: 10px 20px; /* Add padding inside the button */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    font-size: 16px; /* Adjust font size as needed */
+}
+
+/* Optional: Hover effect for the button */
+button.site-btn:hover {
+    background-color: #0d4edd; 
+}
+/* Set text color to black for input fields */
+.contact__form input {
+    color: #000000; /* Text color */
+}
+
+/* Set text color to black for textarea */
+.contact__form textarea {
+    color: #000000; /* Text color */
+}
+
+
+</style>
+{% endblock %}
+
+
+
+{% block body %}
+
+
+
+    <!-- Contact Section Begin -->
+    <section class="contact spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="contact__text">
+                        <div class="section-title">
+                            <span>Information</span>
+                            <h2>Contact Us</h2>
+                            <p>As you might expect of a company that began as a high-end interiors contractor, we pay
+                                strict attention.</p>
+                        </div>
+                        <ul>
+                            <li>
+                                <h4>KOLLAM</h4>
+                                <p>195 Park Square, Kollam <br />+91 8330834887</p>
+                            </li>
+                            <li>
+                                <h4>KOCHI</h4>
+                                <p>109 Avenue, Palarivattom, Kochi  <br />+91 8330834887</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="contact__form">
+                        <form action="#">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="text" placeholder="Name">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" placeholder="Email">
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea placeholder="Message"></textarea>
+                                    <button type="submit" class="site-btn">Send Message</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+     <!-- Map Begin -->
+    <!-- <div class="map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d111551.9926412813!2d-90.27317134641879!3d38.606612219170856!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sbd!4v1597926938024!5m2!1sen!2sbd" height="500" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+    </div> -->
+
+<!-- Map Begin -->
+<div class="map">
+    <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d146258.07817207714!2d76.8720961!3d8.9968866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05fc6123a86ef3%3A0x6cacb422e8fc3ebc!2sKollam%2C%20Kerala!5e0!3m2!1sen!2sin!4v1694411978285!5m2!1sen!2sin"
+        width="600"
+        height="450"
+        style="border:0;"
+        allowfullscreen=""
+        aria-hidden="false"
+        tabindex="0">
+    </iframe>
+</div>
+<!-- Map End -->
+
+    {% endblock body %}

@@ -1,0 +1,287 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+
+
+
+{% block extra_style %}
+<style>
+
+
+.product__details__newpic__item {
+    display: flex;
+    justify-content: center; /* Centers the image horizontally */
+    align-items: center; /* Centers the image vertically if the container has a fixed height */
+    height: 100%; /* Adjust this value as needed */
+    padding-top: 60px; /* Adjust the value as needed */
+}
+.product__details__text{
+    padding-top: 20px; /* Adjust the value as needed */
+}
+.product__details__last__option{
+    padding-top: 35px; /* Adjust the value as needed */
+}
+
+.product__details__newpic__item img {
+    max-width: 100%; /* Ensures the image doesn't overflow the container's width */
+    max-height: 300px; /* Ensures the image doesn't overflow the container's height */
+    object-fit: contain; /* Maintains the aspect ratio of the image */
+}
+/* pop up */
+
+/* add to chart */
+.product__details__newpic__item {
+    display: flex;
+    justify-content: center; /* Centers the image horizontally */
+    align-items: center; /* Centers the image vertically if the container has a fixed height */
+    height: 100%; /* Adjust this value as needed */
+}
+
+.product__details__newpic__item img {
+    max-width: 100%; /* Ensures the image doesn't overflow the container's width */
+    max-height: 300px; /* Ensures the image doesn't overflow the container's height */
+    object-fit: contain; /* Maintains the aspect ratio of the image */
+}
+
+/* Add to Cart Section */
+.product__details__cart__option {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically first */
+    align-items: center; /* Center items horizontally */
+    margin-bottom: 20px; /* Space below the cart options */
+}
+
+
+.product__details__cart__option form {
+    display: flex;
+    align-items: center; /* Aligns the items vertically */
+    gap: 10px; /* Space between the quantity and size options */
+}
+
+.quantity, .product__details__option__size {
+    margin-right: 10px; /* Space between quantity and size options */
+}
+
+.product__details__option__size label {
+    margin-right: 10px; /* Space between size options */
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: center; /* Centers buttons horizontally */
+    gap: 20px; /* Space between buttons */
+}
+
+.primary-btn a {
+    color: #fff; /* White text color */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Align properly */
+   
+}
+
+/* Remove hover effect by ensuring the text color remains white and background color remains consistent */
+.primary-btn a:hover {
+    color: #fff; /* White text color on hover */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Wishlist Button */
+.primary-btn {
+    margin-top: 20px; /* Space from the cart form */
+}
+
+
+</style>
+{% endblock %}
+
+
+
+{% block body %}
+    <!-- Product Details Section Begin -->
+    <section class="shop-details">
+        <div class="container">
+            <div class="row">
+                   
+                <div class="tab-content">
+                    <div class="tab-pane active">
+                        <div class="product__details__newpic__item">
+                            <img src="{{ prod.product_image.url }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-8">
+                <div class="product__details__text">
+                    <h4>{{ prod.name }}</h4>
+                    <div class="rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        <span> - 5 Reviews</span>
+                    </div>
+                    <h3>₹ {{ prod.selling_price }} <span>₹ {{ prod.orginal_price }}</span></h3>
+                    <p>{{ prod.description }}</p>
+                    <div class="product__details__cart__option">
+                    <form action="{% url 'papp:addtocart' prod.slug %}" method="POST">
+                            {% csrf_token %}
+                        <div class="quantity">
+                            <div class="pro-qty">
+                                <input type="number" name="quantity" value="1" min="1">
+                            </div>
+                        </div>
+                        <div class="product__details__option__size">
+                            <span>Size:</span>
+                            <label for="xxl">XXL
+                                <input type="radio" id="xxl" name="size" value="XXL">
+                            </label>
+                            <label for="xl">XL
+                                <input type="radio" id="xl" name="size" value="XL">
+                            </label>
+                            <label for="l">L
+                                <input type="radio" id="l" name="size" value="L">
+                            </label>
+                            <label for="s">S
+                                <input type="radio" id="s" name="size" value="S">
+                            </label>
+                        </div>
+                        <button type="submit" class="primary-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                          </svg> Add to Cart</button>
+                    </form>
+                    </div>
+                    <div class="primary-btn">
+                        <a href="{% url 'papp:add_to_wishlist' prod.slug %}"><i class="fa fa-heart"></i> Add to Wishlist</a>
+                    </div>
+                   
+                    <div class="product__details__last__option">
+                        <h5><span>Guaranteed Safe Checkout</span></h5>
+                        <img src="img/shop-details/details-payment.png" alt="">
+                        <ul>
+                            <li><span>PRODUCT ID:</span>M0{{ prod.id }}</li>
+                            <li><span>Categories:</span> {{ prod.category }}</li>
+                            <!-- <li><span>Tag:</span> Clothes, Skin, Body</li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="product__details__tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-5"
+                            role="tab">Description</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
+                            Previews(5)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
+                            information</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-5" role="tabpanel">
+                            <div class="product__details__tab__content">
+                                
+                                <div class="product__details__tab__content__item">
+                                    <h5>Products Infomation</h5>
+                                    <p class="note">{{ prod.description }}</p>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-6" role="tabpanel">
+                            <div class="product__details__tab__content">
+                                <div class="product__details__tab__content__item">
+                                    <h5>We're experiencing technical difficulties and are unable to display customer reviews at the moment. We apologize for the inconvenience and are working to resolve the issue. Thank you for your patience.</h5>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-7" role="tabpanel">
+                            <br>
+                            <div class="product__details__tab__content__item">
+                                <h5>Products Infomation</h5>
+                                <p><b>We don't have any additional details to share right now. Please check back later.</b></p>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Product Details Section End -->
+
+    <!-- Related Section Begin -->
+    <section class="related spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="related-title">Related Products</h3>
+                </div>
+            </div>
+            <div class="row">
+                {% for product in products %}
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
+                            <ul class="product__hover">
+                                <li><a href="{% url 'papp:add_to_wishlist' product.slug %}"><img src="{% static 'img/icon/heart.png' %}" alt=""><span>Add To Wishlist</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>{{ product.name }}</h6>
+                            
+                            <a href="{% url 'papp:productview' product.category.slug product.slug %}" class="add-cart">View Product</a>
+
+                            
+                            <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <h5>₹{{ product.selling_price }}</h5>
+                            <div class="product__color__select">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No products found in this category.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+    
+    <!-- Related Section End -->
+     
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector(".product__details__cart__option form");
+            form.addEventListener("submit", function(event) {
+                const sizeSelected = form.querySelector("input[name='size']:checked");
+                if (!sizeSelected) {
+                    event.preventDefault();
+                    alert("Please select a size before adding the product to the cart.");
+                }
+            });
+        });
+    </script>
+        
+        
+
+            
+
+{% endblock body %}

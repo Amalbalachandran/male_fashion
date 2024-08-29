@@ -1,0 +1,115 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+
+{% block extra_style %}
+<style>
+    /* styles.css or another linked CSS file */
+    .product__item {
+        margin-bottom: 40px; /* Adds margin between items */
+        padding-top: 40px; /* Adjust the value as needed */
+        border: 1px solid #ddd; /* Optional: border to visualize the item box */
+        border-radius: 8px; /* Optional: rounded corners for a smoother look */
+        overflow: hidden; /* Ensures that content does not overflow the box */
+        background-color: #fff; /* Optional: background color for the box */
+        position: relative; /* Set position relative for absolute positioning of child elements */
+        /* Set a fixed height for the product item box */
+    }
+
+    .product__item__pic {
+        padding: 10px; /* Adds padding within the image container */
+        height: 300px;
+        width: 100%; /* Make sure image container takes full width of product item */
+        background-size: cover; /* Cover the container with the background image */
+        background-position: center; /* Center the image within the container */
+    }
+
+    .product__item__text {
+        padding: 15px; /* Adds padding around the text content */
+        text-align: center; /* Center the text content */
+    }
+
+    .product__item__text h6 {
+        margin-bottom: 10px; /* Margin below the product name */
+    }
+
+    .product__item__text .rating {
+        margin-bottom: 10px; /* Margin below the rating */
+        position: absolute; /* Absolute positioning for placement */
+        bottom: 0px; /* Distance from the bottom of the box */
+        left: 15px; /* Distance from the left of the box */
+        text-align: left; /* Align text to the left */
+    }
+
+    .product__item__text h5 {
+        position: absolute; /* Absolute positioning for placement */
+        bottom: 15px; /* Distance from the bottom of the box */
+        left: 15px; /* Distance from the left of the box */
+        margin: 0; /* Remove default margin */
+    }
+
+    .product__item__text .btn {
+        margin-top: 10px; /* Margin above the button */
+    }
+/*  */
+
+
+</style>
+{% endblock %}
+
+
+{% block body %}
+
+    <!-- Wishlist Section Begin -->
+    <section class="wishlist spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>{{ user.username }}'s Favourite Products</h2>
+                    <div class="row">
+                        {% for item in wishlist_items %}
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="{{ item.product.product_image.url }}">
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>{{ item.product.name }}</h6>
+                                    <a href="{% url 'papp:productview' item.product.category.slug item.product.slug %}" class="add-cart">View Product</a><br>
+                                    <!-- <a href="{% url 'papp:remove_from_wishlist' item.product.slug %}" class="add-cart">Remove from Wishlist</a> -->
+
+                                    
+                                    <!-- <div class="rating">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div> -->
+                                    <h5>₹{{ item.product.selling_price }}</h5>
+                                    <div class="product__color__select">
+                                        <!-- <a href="{% url 'papp:remove_from_wishlist' item.product.slug %}">
+                                            
+                                        </a> -->
+                                        
+                                        <form action="{% url 'papp:remove_from_wishlist' item.product.slug %}" method="post" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Remove from Wishlist</button>
+                                            
+                                        </form>
+                                           
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>No products found in your wishlist.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Wishlist Section End -->
+
+{% endblock body %}

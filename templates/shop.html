@@ -1,0 +1,182 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block extra_style %}
+<style>
+/* Pagination container styling */
+.pagination {
+    display: flex;
+    justify-content: center; /* Center align pagination controls */
+    align-items: center;
+    gap: 10px; /* Space between each pagination control */
+    margin: 20px 0; /* Space above and below the pagination */
+}
+
+/* Individual button styling */
+.pagination a {
+    display: inline-block;
+    padding: 8px 16px; /* Padding inside the buttons */
+    margin: 0; /* No extra margin */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    color: #007bff; /* Button text color */
+    background-color: #fff; /* Button background color */
+    font-weight: bold; /* Bold text */
+    transition: background-color 0.3s, color 0.3s; /* Smooth color transition */
+}
+
+/* Button hover effect */
+.pagination a:hover {
+    background-color: #007bff; /* Background color on hover */
+    color: #fff; /* Text color on hover */
+    border-color: #007bff; /* Border color on hover */
+}
+
+/* Disabled button styling (if needed) */
+.pagination a.disabled {
+    color: #6c757d; /* Disabled text color */
+    border-color: #6c757d; /* Disabled border color */
+    pointer-events: none; /* Disable clicking */
+}
+
+/* Page number span styling */
+.pagination span {
+    display: inline-block;
+    padding: 8px 16px; /* Padding around the text */
+    margin: 0; /* No extra margin */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #f8f9fa; /* Background color */
+    color: #333; /* Text color */
+}
+
+
+</style>
+{% endblock %}
+
+{% block body %}
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+                            <form action="{% url 'papp:search' %}" method="get">
+                                <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+                                <button type="submit"><span class="icon_search"></span></button>
+                            </form>
+                        </div>
+                        <div class="shop__sidebar__accordion">
+                            <div class="accordion" id="accordionExample">
+                            
+                                <!-- category -->
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    </div>
+                                    
+                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__categories">
+                                                <ul class="nice-scroll">
+                                                    {% for category in categories %}
+                                                    <li>
+                                                        <a href="{% url 'papp:shopview' category.slug %}" class="{% if selected_category == category %}active{% endif %}">
+                                                            {{ category.name }}
+                                                        </a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- product display -->
+                <div class="col-lg-9">
+                    <div class="shop__product__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__left">
+                                    <p>Showing {{ products.paginator.per_page }} results</p>
+                                </div>
+                            </div>
+                            <!--  filter sections -->
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__right">
+                                    <p>Sort by Price:</p>
+                                    <form action="{% url 'papp:shop' %}" method="get">
+                                        <select name="sort_by" onchange="this.form.submit()">
+                                            <option value="">Select</option>
+                                            <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Low To High</option>
+                                            <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>High To Low</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% for product in products %}
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
+                                    <ul class="product__hover">
+                                        <li><a href="{% url 'papp:add_to_wishlist' product.slug %}"><img src="{% static 'img/icon/heart.png' %}" alt=""><span>Add To Wishlist</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>{{ product.name }}</h6>
+                                    
+                                    <a href="{% url 'papp:productview' product.category.slug product.slug %}" class="add-cart">View Product</a>
+
+                                    
+                                    <div class="rating">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                    <h5>₹{{ product.selling_price }}</h5>
+                                    <div class="product__color__select">
+                                        <!-- Assuming product colors are handled elsewhere -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>No products found in this category.</p>
+                        {% endfor %}
+                    </div>
+
+                
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <a href="?page=1{% if sort_by %}&sort_by={{ sort_by }}{% endif %}" class="btn-first">First</a>
+                                    <a href="?page={{ page_obj.previous_page_number }}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}" class="btn-previous">Previous</a>
+                                {% endif %}
+                                
+                                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                                
+                                {% if page_obj.has_next %}
+                                    <a href="?page={{ page_obj.next_page_number }}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}" class="btn-next">Next</a>
+                                    <a href="?page={{ page_obj.paginator.num_pages }}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}" class="btn-last">Last</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+
+{% endblock body %}

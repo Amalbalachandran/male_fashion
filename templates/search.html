@@ -1,0 +1,129 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+
+{% block extra_style %}
+<style>
+    /* Center the search bar and make it shorter */
+    .shop__sidebar__search {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    margin-top: 50px; /* Space between the top and search bar */
+    margin-bottom: 20px; /* Space below the search bar */
+}
+    
+    .shop__sidebar__search form {
+        display: flex;
+        max-width: 500px; /* Adjust the max width as needed */
+        width: 100%; /* Allow it to be responsive */
+    }
+    
+    .shop__sidebar__search input[type="text"] {
+        flex: 1; /* Allows the input to take available space */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px 0 0 4px; /* Rounded corners for left side */
+        font-size: 16px;
+    }
+    
+    .shop__sidebar__search button {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 0 4px 4px 0; /* Rounded corners for right side */
+        background-color: #007bff; /* Button background color */
+        color: white; /* Button text color */
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    
+    .shop__sidebar__search button .icon_search {
+        font-size: 20px; /* Adjust the icon size as needed */
+    }
+    
+    .shop__sidebar__search input[type="text"]:focus,
+    .shop__sidebar__search button:hover {
+        border-color: #007bff; /* Highlight border on focus and hover */
+    }
+    /* Reduce the size of the product images */
+    .product__item__pic {
+        background-size: cover; /* Ensure the image covers the container */
+        background-position: center; /* Center the image within the container */
+        height: 200px; /* Adjust the height as needed */
+        width: 250px; /* Ensure it takes up the full width of the container */
+        overflow: hidden; /* Hide any overflow from the image */
+        padding: 15px 15px; /* Equal padding on both sides */
+        box-sizing: border-box; /* Include padding in the element's total width and height */
+
+    }
+
+    .product__item__pic img {
+        display: none; /* Hide the <img> tag if not needed */
+    }
+
+    /* Optional: Adjust the container holding the product image */
+    .product__item {
+        margin-bottom: 30px; /* Space between product items */
+        padding: 15px 15px; /* Equal padding on both sides */
+        box-sizing: border-box; /* Include padding in the element's total width and height */
+
+    }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+<div class="shop__sidebar__search">
+    <form action="{% url 'papp:search' %}" method="get">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search...">
+        <button type="submit"><span class="icon_search"></span></button>
+    </form>
+</div>
+
+<div class="row">
+    {% for product in page_obj %}
+    <div class="col-md-3">
+        <div class="product__item">
+            <div class="product__item__pic set-bg" data-setbg="{{ product.product_image.url }}">
+                <ul class="product__hover">
+                    <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""><span>Wishlist</span></a></li>
+                </ul>
+            </div>
+            <div class="product__item__text">
+                <h6>{{ product.name }}</h6>
+                <a href="{% url 'papp:productview' product.category.slug product.slug %}" class="add-cart">View Product</a>
+                <div class="rating">
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <h5>₹{{ product.selling_price }}</h5>
+            </div>
+        </div>
+    </div>
+    {% empty %} 
+    <p>No products found for "{{ query }}".</p>
+    {% endfor %}
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?q={{ query }}&page=1" class="btn-first">First</a>
+                <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}" class="btn-previous">Previous</a>
+            {% endif %}
+            
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            
+            {% if page_obj.has_next %}
+                <a href="?q={{ query }}&page={{ page_obj.next_page_number }}" class="btn-next">Next</a>
+                <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}" class="btn-last">Last</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
